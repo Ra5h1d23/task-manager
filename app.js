@@ -4,6 +4,8 @@ const tasksRouter = require("./routers/tasks");
 
 const app = express();
 
+app.use(express.json());
+
 const PORT = 3000;
 
 
