@@ -33,10 +33,29 @@ router.delete("/:id", (req, res) => {
 
     tasks.length = 0;
     tasks.push(...filteredTasks);
-    
+
     res.json({
         message: "Task deleted successfully",
     })
+});
+
+router.put("/:id", (req, res) => {
+    const taskId = Number(req.params.id);
+
+    const task = tasks.find((task) => {
+        return task.id === taskId;
+    });
+
+    if (!task) {
+        return res.status(404).json({
+            message: "Task not found",
+        });
+    }
+
+    task.title = req.body.title ?? task.title;
+    task.completed = req.body.completed ?? task.completed;
+
+    res.json(task);
 });
 
 module.exports = router;
