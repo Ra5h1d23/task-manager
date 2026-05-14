@@ -24,4 +24,19 @@ router.post("/", (req, res) => {
     res.status(201).json(newTask);
 });
 
+router.delete("/:id", (req, res) => {
+    const taskId = Number(req.params.id);
+
+    const filteredTasks = tasks.filter((task) => {
+        return task.id !== taskId;
+    });
+
+    tasks.length = 0;
+    tasks.push(...filteredTasks);
+    
+    res.json({
+        message: "Task deleted successfully",
+    })
+});
+
 module.exports = router;
