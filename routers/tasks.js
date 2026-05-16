@@ -5,8 +5,13 @@ const router = express.Router();
 const tasks = [
   {
     id: 1,
-    title: "Learn Node.js",
+    title: "Learn JS",
     completed: false,
+  },
+  {
+    id: 2,
+    title: "Learn Express",
+    completed: true,
   },
 ];
 
@@ -20,6 +25,18 @@ router.get("/titles", (req, res) => {
     });
 
     res.json(titles);
+});
+
+router.get("/search", (req, res) => {
+    const searchTitle = req.query.title;
+
+    const filteredTasks = tasks.filter((task) => {
+        return task.title
+        .toLowerCase()
+        .includes(searchTitle.toLowerCase());
+    });
+
+    res.json(filteredTasks);
 });
 
 router.post("/", (req, res) => {
