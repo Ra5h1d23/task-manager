@@ -14,6 +14,14 @@ router.get("/", (req, res) => {
   res.json(tasks);
 });
 
+router.get("/titles", (req, res) => {
+    const titles = tasks.map((task) => {
+        return task.title;
+    });
+
+    res.json(titles);
+});
+
 router.post("/", (req, res) => {
     if (!req.body.title)
 {
