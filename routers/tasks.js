@@ -15,7 +15,13 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    const newTask = {
+    if (!req.body.title)
+{
+    return res.status(400).json({
+        message: "Title is required",
+    });
+    
+}    const newTask = {
         id: tasks.length + 1,
         title: req.body.title,
         completed: false,
