@@ -89,4 +89,22 @@ router.put("/:id", (req, res) => {
     res.json(task);
 });
 
+router.patch("/:id/toggle", (req, res) => {
+    const taskId = Number(req.params.id);
+    
+    const task = tasks.find((task) => {
+        return task.id === taskId;
+    });
+
+    if (!task) {
+        return res.status(404).json({
+            message: "Task not found",
+        });
+    }
+
+    task.completed = !task.completed;
+
+    res.json(task);
+});
+
 module.exports = router;
