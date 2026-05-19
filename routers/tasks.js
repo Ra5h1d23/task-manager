@@ -2,6 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
+
 const tasks = [
   {
     id: 1,
@@ -14,6 +15,12 @@ const tasks = [
     completed: true,
   },
 ];
+
+function findTaskById(taskId) {
+    return tasks.find((task) => {
+        return task.id === taskId;
+    });
+}
 
 router.get("/", (req, res) => {
   res.json(tasks);
@@ -73,9 +80,7 @@ router.delete("/:id", (req, res) => {
 router.put("/:id", (req, res) => {
     const taskId = Number(req.params.id);
 
-    const task = tasks.find((task) => {
-        return task.id === taskId;
-    });
+    const task = findTaskById(taskId);
 
     if (!task) {
         return res.status(404).json({
@@ -92,9 +97,7 @@ router.put("/:id", (req, res) => {
 router.patch("/:id/toggle", (req, res) => {
     const taskId = Number(req.params.id);
     
-    const task = tasks.find((task) => {
-        return task.id === taskId;
-    });
+    const task = findTaskById(taskId);
 
     if (!task) {
         return res.status(404).json({
