@@ -1,20 +1,17 @@
+
+
+const {
+    getTasks,
+} = require("../controllers/tasks.controller");
+
+
+
 const express = require("express");
 
 const router = express.Router();
 
 
-const tasks = [
-  {
-    id: 1,
-    title: "Learn JS",
-    completed: false,
-  },
-  {
-    id: 2,
-    title: "Learn Express",
-    completed: true,
-  },
-];
+
 
 function findTaskById(taskId) {
     return tasks.find((task) => {
@@ -22,9 +19,7 @@ function findTaskById(taskId) {
     });
 }
 
-router.get("/", (req, res) => {
-  res.json(tasks);
-});
+router.get("/", getTasks);
 
 router.get("/titles", (req, res) => {
     const titles = tasks.map((task) => {
