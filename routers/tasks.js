@@ -1,24 +1,15 @@
-
-
 const {
     getTasks,
     createTask,
+    toggleTask,
 } = require("../controllers/tasks.controller");
 
 
 
 const express = require("express");
 
+
 const router = express.Router();
-
-
-
-
-function findTaskById(taskId) {
-    return tasks.find((task) => {
-        return task.id === taskId;
-    });
-}
 
 router.get("/", getTasks);
 
@@ -92,20 +83,6 @@ router.put("/:id", (req, res) => {
     res.json(task);
 });
 
-router.patch("/:id/toggle", (req, res) => {
-    const taskId = Number(req.params.id);
-    
-    const task = findTaskById(taskId);
-
-    if (!task) {
-        return res.status(404).json({
-            message: "Task not found",
-        });
-    }
-
-    task.completed = !task.completed;
-
-    res.json(task);
-});
+router.patch("/:id/toggle", toggleTask);
 
 module.exports = router;

@@ -2,6 +2,7 @@ const tasks = require("../data/tasks");
 
 const {
     createTask: createTaskService,
+    toggleTask: toggleTaskService,
 } = require("../services/tasks.service");
 
 function getTasks(req, res) {
@@ -22,7 +23,24 @@ function createTask(req, res) {
     res.status(201).json(newTask);
 }
 
+function toggleTask(req, res) {
+    const taskId = Number(req.params.id);
+
+    const updatedTask = toggleTaskService(taskId);
+
+    if (!updatedTask) {
+        return res.status(404).json({
+            message: "Task not found",
+        });
+    }
+
+    res.json(updatedTask);
+}
+
+
+
 module.exports = {
     getTasks,
     createTask,
+    toggleTask,
 };

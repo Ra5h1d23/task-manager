@@ -12,6 +12,20 @@ function createTask(title) {
         return newTask;
     }
 
+function toggleTask(taskId) {
+    const task = tasks.find((task) => {
+        return task.id === taskId;
+    });
+
+    if (!task) {
+        return null;
+    }
+
+    task.completed = !task.completed;
+
+    return task;
+}
     module.exports = {
         createTask,
+        toggleTask,
     };
