@@ -25,7 +25,23 @@ function toggleTask(taskId) {
 
     return task;
 }
+
+function deleteTask(taskId) {
+    const taskIndex = tasks.findIndex((task) => {
+        return task.id === taskId;
+    });
+
+    if (taskIndex === -1) {
+        return null;
+    }
+
+    const deletedTask = tasks.splice(taskIndex, 1);
+
+    return deletedTask[0];
+}
+
     module.exports = {
         createTask,
         toggleTask,
+        deleteTask,
     };

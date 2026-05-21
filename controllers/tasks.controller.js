@@ -3,6 +3,7 @@ const tasks = require("../data/tasks");
 const {
     createTask: createTaskService,
     toggleTask: toggleTaskService,
+    deleteTask: deleteTaskService,
 } = require("../services/tasks.service");
 
 function getTasks(req, res) {
@@ -37,10 +38,24 @@ function toggleTask(req, res) {
     res.json(updatedTask);
 }
 
+function deleteTask(req, res) {
+    const taskId = Number(req.params.id);
+
+    const deletedTask = deleteTaskService(taskId);
+
+    if (!deletedTask) {
+        return res.status(404).json({
+            message: "Task not found",
+        });
+    }
+
+    res.json(deletedTask);
+}
 
 
 module.exports = {
     getTasks,
     createTask,
     toggleTask,
+    deleteTask,
 };

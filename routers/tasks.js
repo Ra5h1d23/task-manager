@@ -2,6 +2,7 @@ const {
     getTasks,
     createTask,
     toggleTask,
+    deleteTask,
 } = require("../controllers/tasks.controller");
 
 
@@ -35,36 +36,8 @@ router.get("/search", (req, res) => {
     res.json(filteredTasks);
 });
 
-router.post("/", (req, res) => {
-    if (!req.body.title)
-{
-    return res.status(400).json({
-        message: "Title is required",
-    });
-    
-}    const newTask = {
-        id: tasks.length + 1,
-        title: req.body.title,
-        completed: false,
-    };
-    tasks.push(newTask);
-    res.status(201).json(newTask);
-});
 
-router.delete("/:id", (req, res) => {
-    const taskId = Number(req.params.id);
 
-    const filteredTasks = tasks.filter((task) => {
-        return task.id !== taskId;
-    });
-
-    tasks.length = 0;
-    tasks.push(...filteredTasks);
-
-    res.json({
-        message: "Task deleted successfully",
-    })
-});
 
 router.put("/:id", (req, res) => {
     const taskId = Number(req.params.id);
@@ -84,5 +57,7 @@ router.put("/:id", (req, res) => {
 });
 
 router.patch("/:id/toggle", toggleTask);
+
+router.delete("/:id", deleteTask);
 
 module.exports = router;
