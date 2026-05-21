@@ -2,6 +2,7 @@
 
 const {
     getTasks,
+    createTask,
 } = require("../controllers/tasks.controller");
 
 
@@ -20,6 +21,8 @@ function findTaskById(taskId) {
 }
 
 router.get("/", getTasks);
+
+router.post("/", createTask);
 
 router.get("/titles", (req, res) => {
     const titles = tasks.map((task) => {
