@@ -3,6 +3,7 @@ const {
     createTask,
     toggleTask,
     deleteTask,
+    updateTask,
 } = require("../controllers/tasks.controller");
 
 
@@ -39,22 +40,7 @@ router.get("/search", (req, res) => {
 
 
 
-router.put("/:id", (req, res) => {
-    const taskId = Number(req.params.id);
-
-    const task = findTaskById(taskId);
-
-    if (!task) {
-        return res.status(404).json({
-            message: "Task not found",
-        });
-    }
-
-    task.title = req.body.title ?? task.title;
-    task.completed = req.body.completed ?? task.completed;
-
-    res.json(task);
-});
+router.put("/:id", updateTask);
 
 router.patch("/:id/toggle", toggleTask);
 

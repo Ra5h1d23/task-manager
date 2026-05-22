@@ -4,6 +4,7 @@ const {
     createTask: createTaskService,
     toggleTask: toggleTaskService,
     deleteTask: deleteTaskService,
+    updateTask: updateTaskService,
 } = require("../services/tasks.service");
 
 function getTasks(req, res) {
@@ -52,10 +53,25 @@ function deleteTask(req, res) {
     res.json(deletedTask);
 }
 
+function updateTask(req, res) {
+    const taskId = Number(req.params.id);
+
+    const updatedTask = updateTaskService(taskId, req.body);
+
+    if (!updatedTask) {
+        return res.status(404).json({
+            message: "Task not found",
+        });
+    }
+
+    res.json(updatedTask);
+}
+
 
 module.exports = {
     getTasks,
     createTask,
     toggleTask,
     deleteTask,
+    updateTask,
 };
