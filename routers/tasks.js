@@ -4,6 +4,7 @@ const {
     toggleTask,
     deleteTask,
     updateTask,
+    getTaskTitles,
 } = require("../controllers/tasks.controller");
 
 
@@ -17,13 +18,7 @@ router.get("/", getTasks);
 
 router.post("/", createTask);
 
-router.get("/titles", (req, res) => {
-    const titles = tasks.map((task) => {
-        return task.title;
-    });
-
-    res.json(titles);
-});
+router.get("/titles", getTaskTitles);
 
 router.get("/search", (req, res) => {
     const searchTitle = req.query.title;

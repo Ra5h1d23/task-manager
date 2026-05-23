@@ -5,6 +5,7 @@ const {
     toggleTask: toggleTaskService,
     deleteTask: deleteTaskService,
     updateTask: updateTaskService,
+    getTaskTitles: getTaskTitlesService,
 } = require("../services/tasks.service");
 
 function getTasks(req, res) {
@@ -67,6 +68,12 @@ function updateTask(req, res) {
     res.json(updatedTask);
 }
 
+function getTaskTitles(req, res) {
+    const titles = getTaskTitlesService();
+
+    res.json(titles);
+}
+
 
 module.exports = {
     getTasks,
@@ -74,4 +81,5 @@ module.exports = {
     toggleTask,
     deleteTask,
     updateTask,
+    getTaskTitles
 };

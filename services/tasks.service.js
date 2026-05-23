@@ -56,10 +56,18 @@ function updateTask(taskId, data) {
     return task;
 }
 
+function getTaskTitles () {
+    return tasks.map((task) => {
+        return task.title;
+    });
+
+};
+
 
     module.exports = {
         createTask,
         toggleTask,
         deleteTask,
         updateTask,
+        getTaskTitles,
     };
