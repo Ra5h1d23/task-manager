@@ -6,6 +6,7 @@ const {
     deleteTask: deleteTaskService,
     updateTask: updateTaskService,
     getTaskTitles: getTaskTitlesService,
+    searchTasks: searchTasksService,
 } = require("../services/tasks.service");
 
 function getTasks(req, res) {
@@ -74,6 +75,15 @@ function getTaskTitles(req, res) {
     res.json(titles);
 }
 
+function searchTasks(req, res) {
+
+    const searchTitle = req.query.title;
+
+    const filteredTasks = searchTasksService(searchTitle);
+    
+    res.json(filteredTasks);
+}
+
 
 module.exports = {
     getTasks,
@@ -81,5 +91,6 @@ module.exports = {
     toggleTask,
     deleteTask,
     updateTask,
-    getTaskTitles
+    getTaskTitles,
+    searchTasks,
 };

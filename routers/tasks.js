@@ -5,6 +5,7 @@ const {
     deleteTask,
     updateTask,
     getTaskTitles,
+    searchTasks,
 } = require("../controllers/tasks.controller");
 
 
@@ -20,20 +21,7 @@ router.post("/", createTask);
 
 router.get("/titles", getTaskTitles);
 
-router.get("/search", (req, res) => {
-    const searchTitle = req.query.title;
-
-    const filteredTasks = tasks.filter((task) => {
-        return task.title
-        .toLowerCase()
-        .includes(searchTitle.toLowerCase());
-    });
-
-    res.json(filteredTasks);
-});
-
-
-
+router.get("/search", searchTasks);
 
 router.put("/:id", updateTask);
 

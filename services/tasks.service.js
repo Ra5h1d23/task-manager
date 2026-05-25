@@ -63,6 +63,15 @@ function getTaskTitles () {
 
 };
 
+function searchTasks(searchTitle) {
+
+    return tasks.filter((task) => {
+        return task.title
+        .toLowerCase()
+        .includes(searchTitle.toLowerCase());
+    });
+}
+
 
     module.exports = {
         createTask,
@@ -70,4 +79,5 @@ function getTaskTitles () {
         deleteTask,
         updateTask,
         getTaskTitles,
+        searchTasks,
     };
