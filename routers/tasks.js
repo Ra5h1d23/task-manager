@@ -8,6 +8,8 @@ const {
     searchTasks,
 } = require("../controllers/tasks.controller");
 
+const validateTask = require("../middlewares/validate-task.middleware");
+
 
 
 const express = require("express");
@@ -17,7 +19,7 @@ const router = express.Router();
 
 router.get("/", getTasks);
 
-router.post("/", createTask);
+router.post("/", validateTask, createTask);
 
 router.get("/titles", getTaskTitles);
 

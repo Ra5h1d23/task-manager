@@ -2,9 +2,13 @@ const express = require("express");
 
 const tasksRouter = require("./routers/tasks");
 
+const logger = require("./middlewares/logger.middleware");
+
 const app = express();
 
 app.use(express.json());
+
+app.use(logger);
 
 const PORT = 3000;
 
