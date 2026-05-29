@@ -7,10 +7,23 @@ const {
     updateTask: updateTaskService,
     getTaskTitles: getTaskTitlesService,
     searchTasks: searchTasksService,
+    getTasksAsync: getTasksAsyncService,
 } = require("../services/tasks.service");
 
-function getTasks(req, res) {
-    res.json(tasks);
+async function getTasks(req, res, next) {
+
+    try {
+
+        const tasks = await getTasksAsyncService();
+
+        res.json(tasks);
+    
+    } catch (error) {
+
+        next(error);
+
+    }
+
 }
 
 function createTask(req, res) {

@@ -72,6 +72,25 @@ function searchTasks(searchTitle) {
     });
 }
 
+function delay(ms) {
+
+    return new Promise((resolve) => {
+
+        setTimeout(() => {
+            resolve();
+        }, ms);
+    });
+
+}
+
+    async function getTasksAsync() {
+
+        await delay(2000);
+
+        return tasks;
+    }
+
+
 
     module.exports = {
         createTask,
@@ -80,4 +99,5 @@ function searchTasks(searchTitle) {
         updateTask,
         getTaskTitles,
         searchTasks,
+        getTasksAsync,
     };
