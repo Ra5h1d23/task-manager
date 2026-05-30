@@ -25,13 +25,8 @@ async function getTasks(req, res, next) {
 }
 
 function createTask(req, res) {
+    
     const {title} = req.body;
-
-    if (!title) {
-        return res.status(400).json({
-            message: "Title is required",
-        });
-    }
 
     const newTask = createTaskService(title);
 

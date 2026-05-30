@@ -1,11 +1,11 @@
+const ValidationError = require("../errors/validation.error");
+
 function validateTask(req, res, next) {
 
     const { title } = req.body;
 
     if (!title) {
-        return res.status(400).json({
-            message: "Title is required",
-        });
+        throw new ValidationError("Title is required");
     }
 
     next();
