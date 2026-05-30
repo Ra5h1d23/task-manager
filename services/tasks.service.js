@@ -1,5 +1,7 @@
 const tasks = require("../data/tasks");
 
+const NotFoundError = require("../errors/not-found.error");
+
 function createTask(title) {
         const newTask = {
             id: tasks.length + 1,
@@ -18,7 +20,7 @@ function toggleTask(taskId) {
     });
 
     if (!task) {
-        return null;
+        throw new NotFoundError("Task not found");
     }
 
     task.completed = !task.completed;
@@ -32,7 +34,7 @@ function deleteTask(taskId) {
     });
 
     if (taskIndex === -1) {
-        return null;
+        throw new NotFoundError("Task not found");
     }
 
     const deletedTask = tasks.splice(taskIndex, 1);
@@ -46,7 +48,7 @@ function updateTask(taskId, data) {
     });
 
     if (!task) {
-        return null;
+        throw new NotFoundError("Task not found");
     }
 
     task.title = data.title ?? task.title;

@@ -1,5 +1,3 @@
-const tasks = require("../data/tasks");
-
 const {
     createTask: createTaskService,
     toggleTask: toggleTaskService,
@@ -40,46 +38,42 @@ function createTask(req, res) {
     res.status(201).json(newTask);
 }
 
-function toggleTask(req, res) {
-    const taskId = Number(req.params.id);
+function toggleTask(req, res, next) {
+    try {
+        const taskId = Number(req.params.id);
 
-    const updatedTask = toggleTaskService(taskId);
+        const updatedTask = toggleTaskService(taskId);
 
-    if (!updatedTask) {
-        return res.status(404).json({
-            message: "Task not found",
-        });
+        res.json(updatedTask);
+
+    } catch (error) {
+        next(error);
     }
-
-    res.json(updatedTask);
 }
 
-function deleteTask(req, res) {
-    const taskId = Number(req.params.id);
+function deleteTask(req, res, next) {
+    try {
+        const taskId = Number(req.params.id);
 
-    const deletedTask = deleteTaskService(taskId);
+        const deletedTask = deleteTaskService(taskId);
 
-    if (!deletedTask) {
-        return res.status(404).json({
-            message: "Task not found",
-        });
+        res.json(deletedTask);
+    } catch (error) {
+        next(error);
     }
-
-    res.json(deletedTask);
 }
 
-function updateTask(req, res) {
-    const taskId = Number(req.params.id);
+function updateTask(req, res, next) {
+    try {
+        const taskId = Number(req.params.id);
 
-    const updatedTask = updateTaskService(taskId, req.body);
+        const updatedTask = updateTaskService(taskId, req.body);
 
-    if (!updatedTask) {
-        return res.status(404).json({
-            message: "Task not found",
-        });
+        res.json(updatedTask);
+    
+    } catch (error) {
+        next(error);
     }
-
-    res.json(updatedTask);
 }
 
 function getTaskTitles(req, res) {
