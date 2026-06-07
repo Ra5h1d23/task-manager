@@ -2,6 +2,8 @@ const users = require("../data/users");
 
 const ValidationError = require("../errors/validation.error");
 
+const UnauthorizedError = require("../errors/unauthorized.error");
+
 function registerUser(email, password) {
 
     const existingUser = users.find((user) => {
@@ -16,7 +18,8 @@ function registerUser(email, password) {
 
     return createUser(email, password);
 }
-    function createUser(email, password) {
+    
+function createUser(email, password) {
 
         const newUser = {
             id: users.length + 1,
@@ -30,7 +33,29 @@ function registerUser(email, password) {
 
     }
 
+function loginUser(email, password) {
+
+    const user = users.find((user) => {
+        return user.email === email;
+    });
+
+    if (!user) {
+        throw new UnauthorizedError(
+            "Invalid email or password"
+        );
+    }
+
+    if (user.password !== password) {
+        throw new UnauthorizedError(
+            "Invalid email or password"
+        );
+    }
+
+    return user;
+}
+
 
 module.exports = {
     registerUser,
+    loginUser,
 };
