@@ -1,8 +1,11 @@
 const {
-
 registerUser,
 loginUser,
 } = require("../services/users.service");
+
+const {
+    generateToken,
+} = require("../services/auth.service");
 
 
 function register(req, res, next) {
@@ -27,7 +30,11 @@ function login(req, res, next) {
 
         const loggedInUser = loginUser(email, password);
 
-        res.status(200).json(loggedInUser);
+        const token = generateToken(loggedInUser.id);
+
+        res.status(200).json({
+            token,
+        });
     } catch (error) {
 
         next(error);
