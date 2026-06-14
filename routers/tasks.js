@@ -6,9 +6,14 @@ const {
     updateTask,
     getTaskTitles,
     searchTasks,
+    getMyTasks,
 } = require("../controllers/tasks.controller");
 
 const validateTask = require("../middlewares/validate-task.middleware");
+
+const { 
+    authMiddleware, 
+} = require("../middlewares/auth.middleware");
 
 
 
@@ -17,7 +22,7 @@ const express = require("express");
 
 const router = express.Router();
 
-router.get("/", getTasks);
+router.get("/", authMiddleware, getMyTasks);
 
 router.post("/", validateTask, createTask);
 

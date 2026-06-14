@@ -6,6 +6,7 @@ const {
     getTaskTitles: getTaskTitlesService,
     searchTasks: searchTasksService,
     getTasksAsync: getTasksAsyncService,
+    getTasksByUserId: getTasksByUserIdService,
 } = require("../services/tasks.service");
 
 async function getTasks(req, res, next) {
@@ -86,6 +87,16 @@ function searchTasks(req, res) {
     res.json(filteredTasks);
 }
 
+function getMyTasks(req, res, next) {
+    try {
+        const tasks = getTasksByUserIdService(req.user.id);
+
+        res.status(200).json(tasks);
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 module.exports = {
     getTasks,
@@ -95,4 +106,5 @@ module.exports = {
     updateTask,
     getTaskTitles,
     searchTasks,
+    getMyTasks,
 };

@@ -74,6 +74,12 @@ function searchTasks(searchTitle) {
     });
 }
 
+function getTasksByUserId(userId) {
+    return tasks.filter((task) => {
+        return task.userId === userId;
+    });
+}
+
 function delay(ms) {
 
     return new Promise((resolve) => {
@@ -102,4 +108,5 @@ function delay(ms) {
         getTaskTitles,
         searchTasks,
         getTasksAsync,
+        getTasksByUserId,
     };
