@@ -4,6 +4,8 @@ const tasksRouter = require("./routers/tasks");
 
 const authRouter = require("./routers/auth.routes");
 
+const usersRoutes = require("./routers/users.routes");
+
 const logger = require("./middlewares/logger.middleware");
 
 const errorMiddleware = require("./middlewares/error.middleware");
@@ -15,6 +17,8 @@ app.use(express.json());
 app.use(logger);
 
 app.use("/auth", authRouter);
+
+app.use("/users", usersRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend server is working");
