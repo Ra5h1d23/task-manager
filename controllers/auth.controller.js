@@ -8,12 +8,12 @@ const {
 } = require("../services/auth.service");
 
 
-function register(req, res, next) {
+async function register(req, res, next) {
     try {
 
         const { email, password } = req.body;
 
-        const newUser = registerUser(email, password);
+        const newUser = await registerUser(email, password);
 
         res.status(201).json(newUser);
 
@@ -23,12 +23,12 @@ function register(req, res, next) {
     }
 }
 
-function login(req, res, next) {
+async function login(req, res, next) {
     try {
 
         const { email, password } = req.body;
 
-        const loggedInUser = loginUser(email, password);
+        const loggedInUser = await loginUser(email, password);
 
         const token = generateToken(loggedInUser.id);
 

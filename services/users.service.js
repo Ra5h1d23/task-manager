@@ -35,11 +35,14 @@ async function createUser(email, password) {
     }
            
 
-function loginUser(email, password) {
+async function loginUser(email, password) {
 
-    const user = users.find((user) => {
-        return user.email === email;
-    });
+    const result = await pool.query(
+        "SELECT * FROM users WHERE email = $1",
+        [email]
+    );
+
+    const user = result.rows[0];
 
     if (!user) {
         throw new UnauthorizedError(
@@ -56,11 +59,14 @@ function loginUser(email, password) {
     return user;
 }
 
-function getUserById(id) {
+async function getUserById(id) {
 
-    const user = users.find((user) => {
-        return user.id === id;
-    });
+    const result = await pool.query(
+        "SELECT id, email FROM users WHERE id = $1",
+        [id]
+    );
+
+    const user = result.rows[0];
 
     if (!user) {
         throw new NotFoundError(
@@ -68,10 +74,7 @@ function getUserById(id) {
         );
     }
 
-    return {
-        id: user.id,
-        email: user.email,
-    };
+    return user;
 }
 
 
