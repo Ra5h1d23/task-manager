@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Ra5h1d23/task-manager#readme",
   "dependencies": {
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.21.0"
   }
 }

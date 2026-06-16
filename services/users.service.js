@@ -1,4 +1,4 @@
-const users = require("../data/users");
+const pool = require("../config/db");
 
 const ValidationError = require("../errors/validation.error");
 
@@ -6,11 +6,14 @@ const UnauthorizedError = require("../errors/unauthorized.error");
 
 const NotFoundError = require("../errors/not-found.error");
 
-function registerUser(email, password) {
+async function registerUser(email, password) {
 
-    const existingUser = users.find((user) => {
-        return user.email === email;
-    });
+    const result = await pool.query(
+        "SELECT * FROM users WHERE email = $1",
+        [email]
+    );
+
+    const existingUser = result.rows[0];
 
     if (existingUser) {
         throw new ValidationError(
@@ -18,22 +21,19 @@ function registerUser(email, password) {
         );
     }
 
-    return createUser(email, password);
+    return await createUser(email, password);
 }
     
-function createUser(email, password) {
+async function createUser(email, password) {
 
-        const newUser = {
-            id: users.length + 1,
-            email,
-            password,
-        };
+        const result = await pool.query(
+            "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email",
+            [email, password]
+        );
 
-        users.push(newUser);
-
-        return newUser;
-
+        return result.rows[0];
     }
+           
 
 function loginUser(email, password) {
 
