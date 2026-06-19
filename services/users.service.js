@@ -1,5 +1,7 @@
 const pool = require("../config/db");
 
+const bcrypt = require("bcrypt");
+
 const ValidationError = require("../errors/validation.error");
 
 const UnauthorizedError = require("../errors/unauthorized.error");
@@ -26,9 +28,11 @@ async function registerUser(email, password) {
     
 async function createUser(email, password) {
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const result = await pool.query(
             "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email",
-            [email, password]
+            [email, hashedPassword]
         );
 
         return result.rows[0];
@@ -50,7 +54,12 @@ async function loginUser(email, password) {
         );
     }
 
-    if (user.password !== password) {
+    const isPasswordValid = await bcrypt.compare(
+        password,
+        user.password
+    );
+
+    if (!isPasswordValid) {
         throw new UnauthorizedError(
             "Invalid email or password"
         );
