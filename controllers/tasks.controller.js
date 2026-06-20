@@ -78,10 +78,14 @@ async function updateTask(req, res, next) {
     }
 }
 
-function getTaskTitles(req, res) {
-    const titles = getTaskTitlesService();
+async function getTaskTitles(req, res, next) {
+    try {
+        const titles = await getTaskTitlesService(req.user.id);
 
     res.json(titles);
+    } catch (error) {
+        next(error);
+    }
 }
 
 function searchTasks(req, res) {

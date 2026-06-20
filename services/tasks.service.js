@@ -62,12 +62,18 @@ function updateTask(taskId, data) {
     return task;
 }
 
-function getTaskTitles () {
-    return tasks.map((task) => {
-        return task.title;
-    });
+async function getTaskTitles (userId) {
+    const result = await pool.query(
+        `
+        SELECT title
+        FROM tasks
+        WHERE user_id = $1
+        `,
+        [userId]
+    );
 
-};
+    return result.rows.map((row) => row.title);
+}
 
 function searchTasks(searchTitle) {
 

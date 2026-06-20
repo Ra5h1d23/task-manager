@@ -26,7 +26,7 @@ router.get("/", authMiddleware, getMyTasks);
 
 router.post("/", authMiddleware, validateTask, createTask);
 
-router.get("/titles", getTaskTitles);
+router.get("/titles", authMiddleware, getTaskTitles);
 
 router.get("/search", searchTasks);
 
