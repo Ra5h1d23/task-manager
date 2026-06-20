@@ -24,7 +24,7 @@ const router = express.Router();
 
 router.get("/", authMiddleware, getMyTasks);
 
-router.post("/", validateTask, createTask);
+router.post("/", authMiddleware, validateTask, createTask);
 
 router.get("/titles", getTaskTitles);
 

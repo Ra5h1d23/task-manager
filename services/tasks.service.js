@@ -1,17 +1,21 @@
+const pool = require("../config/db");
+
 const tasks = require("../data/tasks");
 
 const NotFoundError = require("../errors/not-found.error");
 
-function createTask(title) {
-        const newTask = {
-            id: tasks.length + 1,
-            title,
-            completed: false,
-        };
+async function createTask(title, user_Id) {
 
-        tasks.push(newTask);
+        const result = await pool.query(
+            `
+            INSERT INTO tasks (title, completed, user_id)
+            VALUES ($1, $2, $3)
+            RETURNING *
+            `,
+            [title, false, user_Id]
+        );
 
-        return newTask;
+        return result.rows[0];
     }
 
 function toggleTask(taskId) {
@@ -74,10 +78,17 @@ function searchTasks(searchTitle) {
     });
 }
 
-function getTasksByUserId(userId) {
-    return tasks.filter((task) => {
-        return task.userId === userId;
-    });
+async function getTasksByUserId(userId) {
+    const result = await pool.query(
+        `
+        SELECT *
+        FROM tasks
+        WHERE user_id = $1
+        `,
+        [userId]
+    );
+
+    return result.rows;
 }
 
 function delay(ms) {

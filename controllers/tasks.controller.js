@@ -25,20 +25,26 @@ async function getTasks(req, res, next) {
 
 }
 
-function createTask(req, res) {
-    
-    const {title} = req.body;
+async function createTask(req, res, next) {
+    try {
+        const { title } = req.body;
 
-    const newTask = createTaskService(title);
+        const newTask = await createTaskService(
+            title,
+            req.user.id
+        );
 
-    res.status(201).json(newTask);
+        res.status(201).json(newTask);
+    } catch (error) {
+        next(error);
+    }
 }
 
-function toggleTask(req, res, next) {
+async function toggleTask(req, res, next) {
     try {
         const taskId = Number(req.params.id);
 
-        const updatedTask = toggleTaskService(taskId);
+        const updatedTask = await toggleTaskService(taskId);
 
         res.json(updatedTask);
 
@@ -47,11 +53,11 @@ function toggleTask(req, res, next) {
     }
 }
 
-function deleteTask(req, res, next) {
+async function deleteTask(req, res, next) {
     try {
         const taskId = Number(req.params.id);
 
-        const deletedTask = deleteTaskService(taskId);
+        const deletedTask = await deleteTaskService(taskId);
 
         res.json(deletedTask);
     } catch (error) {
@@ -59,11 +65,11 @@ function deleteTask(req, res, next) {
     }
 }
 
-function updateTask(req, res, next) {
+async function updateTask(req, res, next) {
     try {
         const taskId = Number(req.params.id);
 
-        const updatedTask = updateTaskService(taskId, req.body);
+        const updatedTask = await updateTaskService(taskId, req.body);
 
         res.json(updatedTask);
     
@@ -87,9 +93,9 @@ function searchTasks(req, res) {
     res.json(filteredTasks);
 }
 
-function getMyTasks(req, res, next) {
+async function getMyTasks(req, res, next) {
     try {
-        const tasks = getTasksByUserIdService(req.user.id);
+        const tasks = await getTasksByUserIdService(req.user.id);
 
         res.status(200).json(tasks);
     } catch (error) {
