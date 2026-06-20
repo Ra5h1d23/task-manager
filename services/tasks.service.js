@@ -1,12 +1,10 @@
 const pool = require("../config/db");
 
-const tasks = require("../data/tasks");
-
 const NotFoundError = require("../errors/not-found.error");
 
 async function createTask(title, user_Id) {
-
-        const result = await pool.query(
+    
+    const result = await pool.query(
             `
             INSERT INTO tasks (title, completed, user_id)
             VALUES ($1, $2, $3)
@@ -18,51 +16,75 @@ async function createTask(title, user_Id) {
         return result.rows[0];
     }
 
-function toggleTask(taskId) {
-    const task = tasks.find((task) => {
-        return task.id === taskId;
-    });
-
-    if (!task) {
-        throw new NotFoundError("Task not found");
-    }
-
-    task.completed = !task.completed;
-
-    return task;
-}
-
-function deleteTask(taskId) {
-    const taskIndex = tasks.findIndex((task) => {
-        return task.id === taskId;
-    });
-
-    if (taskIndex === -1) {
-        throw new NotFoundError("Task not found");
-    }
-
-    const deletedTask = tasks.splice(taskIndex, 1);
-
-    return deletedTask[0];
-}
-
-function updateTask(taskId, data) {
-    const task = tasks.find((task) => {
-        return task.id === taskId;
-    });
-
-    if (!task) {
-        throw new NotFoundError("Task not found");
-    }
-
-    task.title = data.title ?? task.title;
+async function toggleTask(taskId, userId) {
     
-    task.completed = data.completed ?? task.completed;
+    const result = await pool.query(
+        `
+        UPDATE tasks
+        SET completed = NOT completed
+        WHERE id = $1
+        AND user_id = $2
+        RETURNING *
+        `,
+        [taskId, userId]
+    );
 
-    return task;
+    if (result.rows.lenght === 0) {
+        throw new NotFoundError("Task not found");
+    }
+
+    return result.rows[0];
 }
+
+async function deleteTask(taskId, userId) {
+    
+    const result = await pool.query(
+        `
+        DELETE FROM tasks
+        WHERE id = $1
+        AND user_id = $2
+        RETURNING *
+        `,
+        [taskId, userId]
+    );
+
+    if (result.rows.length === 0) {
+        throw new NotFoundError("Task not found");
+    }
+
+    return result.rows[0];
+}
+
+async function updateTask(taskId, data, userId) {
+    
+    const result = await pool.query(
+        `
+        UPDATE tasks
+        SET 
+            title = COALESCE($1, title),
+            completed = COALESCE($2, completed)
+        WHERE id = $3 
+        AND user_id = $4
+        RETURNING *
+        `,
+        [
+            data.title, 
+            data.completed, 
+            taskId, 
+            userId
+        ]
+    );
+
+    if (result.rows.length === 0) {
+        throw new NotFoundError("Task not found");
+    }
+
+    return result.rows[0];
+}
+
 
 async function getTaskTitles (userId) {
+    
     const result = await pool.query(
         `
         SELECT title
@@ -75,16 +97,23 @@ async function getTaskTitles (userId) {
     return result.rows.map((row) => row.title);
 }
 
-function searchTasks(searchTitle) {
+async function searchTasks(searchTitle, userId) {
 
-    return tasks.filter((task) => {
-        return task.title
-        .toLowerCase()
-        .includes(searchTitle.toLowerCase());
-    });
+    const result = await pool.query(
+        `
+        SELECT *
+        FROM tasks
+        WHERE user_id = $1
+        AND title ILIKE $2
+        `,
+        [userId, `%${searchTitle}%`]
+    );
+
+    return result.rows;
 }
 
 async function getTasksByUserId(userId) {
+    
     const result = await pool.query(
         `
         SELECT *
@@ -97,23 +126,6 @@ async function getTasksByUserId(userId) {
     return result.rows;
 }
 
-function delay(ms) {
-
-    return new Promise((resolve) => {
-
-        setTimeout(() => {
-            resolve();
-        }, ms);
-    });
-
-}
-
-    async function getTasksAsync() {
-
-        await delay(2000);
-
-        return tasks;
-    }
 
 
 
@@ -124,6 +136,5 @@ function delay(ms) {
         updateTask,
         getTaskTitles,
         searchTasks,
-        getTasksAsync,
         getTasksByUserId,
     };

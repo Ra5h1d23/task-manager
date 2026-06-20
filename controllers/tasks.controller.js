@@ -5,25 +5,9 @@ const {
     updateTask: updateTaskService,
     getTaskTitles: getTaskTitlesService,
     searchTasks: searchTasksService,
-    getTasksAsync: getTasksAsyncService,
     getTasksByUserId: getTasksByUserIdService,
 } = require("../services/tasks.service");
 
-async function getTasks(req, res, next) {
-
-    try {
-
-        const tasks = await getTasksAsyncService();
-
-        res.json(tasks);
-    
-    } catch (error) {
-
-        next(error);
-
-    }
-
-}
 
 async function createTask(req, res, next) {
     try {
@@ -44,7 +28,7 @@ async function toggleTask(req, res, next) {
     try {
         const taskId = Number(req.params.id);
 
-        const updatedTask = await toggleTaskService(taskId);
+        const updatedTask = await toggleTaskService(taskId, req.user.id);
 
         res.json(updatedTask);
 
@@ -57,7 +41,7 @@ async function deleteTask(req, res, next) {
     try {
         const taskId = Number(req.params.id);
 
-        const deletedTask = await deleteTaskService(taskId);
+        const deletedTask = await deleteTaskService(taskId, req.user.id);
 
         res.json(deletedTask);
     } catch (error) {
@@ -69,7 +53,7 @@ async function updateTask(req, res, next) {
     try {
         const taskId = Number(req.params.id);
 
-        const updatedTask = await updateTaskService(taskId, req.body);
+        const updatedTask = await updateTaskService(taskId, req.body, req.user.id);
 
         res.json(updatedTask);
     
@@ -88,13 +72,20 @@ async function getTaskTitles(req, res, next) {
     }
 }
 
-function searchTasks(req, res) {
+async function searchTasks(req, res, next) {
 
-    const searchTitle = req.query.title;
+    try {
+        const searchTitle = req.query.title;
 
-    const filteredTasks = searchTasksService(searchTitle);
-    
-    res.json(filteredTasks);
+        const filteredTasks = await searchTasksService(
+            searchTitle,
+            req.user.id
+        );
+
+        res.json(filteredTasks);
+    } catch (error) {
+        next(error);
+    }
 }
 
 async function getMyTasks(req, res, next) {
@@ -109,7 +100,6 @@ async function getMyTasks(req, res, next) {
 
 
 module.exports = {
-    getTasks,
     createTask,
     toggleTask,
     deleteTask,

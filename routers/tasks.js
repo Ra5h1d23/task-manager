@@ -1,5 +1,4 @@
 const {
-    getTasks,
     createTask,
     toggleTask,
     deleteTask,
@@ -28,12 +27,12 @@ router.post("/", authMiddleware, validateTask, createTask);
 
 router.get("/titles", authMiddleware, getTaskTitles);
 
-router.get("/search", searchTasks);
+router.get("/search", authMiddleware, searchTasks);
 
-router.put("/:id", updateTask);
+router.put("/:id", authMiddleware, updateTask);
 
-router.patch("/:id/toggle", toggleTask);
+router.patch("/:id/toggle", authMiddleware, toggleTask);
 
-router.delete("/:id", deleteTask);
+router.delete("/:id", authMiddleware, deleteTask);
 
 module.exports = router;
