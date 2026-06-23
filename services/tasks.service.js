@@ -112,19 +112,32 @@ async function searchTasks(searchTitle, userId) {
     return result.rows;
 }
 
-async function getTasksByUserId(userId) {
+async function getTasksByUserId(userId,
+                                sort = "asc",
+                                page = 1,
+                                limit = 10
+                                ) {
+
+    const order = sort === "desc" ? "DESC" : "ASC";
+
+    const offset = (page - 1) * limit;
     
     const result = await pool.query(
         `
         SELECT *
         FROM tasks
         WHERE user_id = $1
+        ORDER BY id ${order}
+        LIMIT $2
+        OFFSET $3
         `,
-        [userId]
+        [userId, limit, offset]
     );
 
     return result.rows;
 }
+
+
 
 
 

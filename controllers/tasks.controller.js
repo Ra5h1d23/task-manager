@@ -90,13 +90,24 @@ async function searchTasks(req, res, next) {
 
 async function getMyTasks(req, res, next) {
     try {
-        const tasks = await getTasksByUserIdService(req.user.id);
+        const sort = req.query.sort;
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+
+        const tasks = await getTasksByUserIdService(
+            req.user.id, 
+            sort, 
+            page, 
+            limit
+        );
 
         res.status(200).json(tasks);
     } catch (error) {
         next(error);
     }
 }
+
+
 
 
 module.exports = {

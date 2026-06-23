@@ -6,6 +6,7 @@ const {
     getTaskTitles,
     searchTasks,
     getMyTasks,
+    getTasksSorted,
 } = require("../controllers/tasks.controller");
 
 const validateTask = require("../middlewares/validate-task.middleware");
