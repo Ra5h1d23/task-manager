@@ -6,6 +6,7 @@ const {
     getTaskTitles: getTaskTitlesService,
     searchTasks: searchTasksService,
     getTasksByUserId: getTasksByUserIdService,
+    getTasksCount: getTasksCountService,
 } = require("../services/tasks.service");
 
 
@@ -101,13 +102,21 @@ async function getMyTasks(req, res, next) {
             limit
         );
 
-        res.status(200).json(tasks);
+        const totalTasks = await getTasksCountService(req.user.id);
+
+        const totalPages = Math.ceil(totalTasks / limit);
+
+        res.status(200).json({
+            page,
+            limit,
+            totalTasks,
+            totalPages,
+            tasks
+        });
     } catch (error) {
         next(error);
     }
 }
-
-
 
 
 module.exports = {

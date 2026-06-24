@@ -137,12 +137,20 @@ async function getTasksByUserId(userId,
     return result.rows;
 }
 
+async function getTasksCount(userId) {
+    const result = await pool.query(
+        `
+        SELECT COUNT(*)
+        FROM tasks
+        WHERE user_id = $1
+        `,
+        [userId]
+    );
 
+    return Number(result.rows[0].count);
+}
 
-
-
-
-    module.exports = {
+module.exports = {
         createTask,
         toggleTask,
         deleteTask,
@@ -150,4 +158,5 @@ async function getTasksByUserId(userId,
         getTaskTitles,
         searchTasks,
         getTasksByUserId,
+        getTasksCount,
     };
