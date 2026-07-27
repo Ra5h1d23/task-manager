@@ -112,16 +112,35 @@ async function searchTasks(searchTitle, userId) {
     return result.rows;
 }
 
-async function getTasksByUserId(userId,
-                                sort = "asc",
-                                page = 1,
-                                limit = 10
-                                ) {
+async function getTasksByUserId(
+    userId,
+    sort = "asc",
+    page = 1,
+    limit = 10,
+    completed
+) {
 
     const order = sort === "desc" ? "DESC" : "ASC";
 
     const offset = (page - 1) * limit;
     
+    if (completed !== undefined) {
+        const result = await pool.query(
+            `
+            SELECT *
+            FROM tasks
+            WHERE user_id = $1
+            AND completed = $2
+            ORDER BY id ${order}
+            LIMIT $3
+            OFFSET $4
+            `,
+            [userId, completed, limit, offset]
+    );
+
+        return result.rows;
+    }
+
     const result = await pool.query(
         `
         SELECT *
@@ -132,9 +151,10 @@ async function getTasksByUserId(userId,
         OFFSET $3
         `,
         [userId, limit, offset]
+
     );
 
-    return result.rows;
+        return result.rows;
 }
 
 async function getTasksCount(userId) {

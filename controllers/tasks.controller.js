@@ -94,12 +94,15 @@ async function getMyTasks(req, res, next) {
         const sort = req.query.sort;
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
+        const completed = 
+            req.query.completed === undefined ? undefined : req.query.completed === "true";
 
         const tasks = await getTasksByUserIdService(
             req.user.id, 
             sort, 
             page, 
-            limit
+            limit,
+            completed
         );
 
         const totalTasks = await getTasksCountService(req.user.id);
