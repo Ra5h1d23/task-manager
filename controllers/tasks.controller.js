@@ -7,6 +7,7 @@ const {
     searchTasks: searchTasksService,
     getTasksByUserId: getTasksByUserIdService,
     getTasksCount: getTasksCountService,
+    getTaskById: getTaskByIdService,
 } = require("../services/tasks.service");
 
 
@@ -121,6 +122,29 @@ async function getMyTasks(req, res, next) {
     }
 }
 
+async function getTaskById(req, res, next) {
+    try {
+        const id = Number(req.params.id);
+
+        if (Number.isNaN(id)) {
+            return res.status(400).json({
+                message: "Invalid task Id",
+            });
+        }
+
+        const task = await getTaskByIdService(id, req.user.id);
+
+        if (!task) {
+            return res.status(404).json({
+                message: "Task not found",
+            });
+        }
+        return res.status(200).json(task);
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 module.exports = {
     createTask,
@@ -130,4 +154,5 @@ module.exports = {
     getTaskTitles,
     searchTasks,
     getMyTasks,
+    getTaskById,
 };
